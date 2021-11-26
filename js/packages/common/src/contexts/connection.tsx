@@ -77,6 +77,12 @@ export const ENDPOINTS: Array<Endpoint> = [
     url: clusterApiUrl('devnet'),
     chainId: ChainId.Devnet,
   },
+  {
+    name: 'quicknode',
+    label: 'devnet (quicknode)',
+    url: 'https://ancient-little-flower.solana-devnet.quiknode.pro/',
+    chainId: ChainId.Devnet,
+  },
 ];
 
 const DEFAULT_ENDPOINT = ENDPOINTS[0];
