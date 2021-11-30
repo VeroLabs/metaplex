@@ -37,6 +37,7 @@ export type ENDPOINT_NAME =
   | 'testnet'
   | 'devnet'
   | 'localnet'
+  | 'quicknode'
   | 'lending';
 
 type Endpoint = {
