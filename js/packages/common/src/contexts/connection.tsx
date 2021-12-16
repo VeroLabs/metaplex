@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   TokenInfo,
   TokenListProvider,
@@ -36,8 +37,10 @@ export type ENDPOINT_NAME =
   | 'mainnet-beta-serum'
   | 'testnet'
   | 'devnet'
+  | 'devnet-vero'
   | 'localnet'
-  | 'quicknode'
+  | 'quicknode-dev'
+  | 'quicknode-test'
   | 'lending';
 
 type Endpoint = {
@@ -79,11 +82,17 @@ export const ENDPOINTS: Array<Endpoint> = [
     chainId: ChainId.Devnet,
   },
   {
-    name: 'quicknode',
+    name: 'quicknode-dev',
     label: 'devnet (quicknode)',
-    url: 'https://ancient-little-flower.solana-devnet.quiknode.pro/',
+    url: 'https://hidden-winter-violet.solana-devnet.quiknode.pro/',
     chainId: ChainId.Devnet,
   },
+  {
+    name: 'quicknode-test',
+    label: 'testnet (quicknode)',
+    url: 'https://floral-late-leaf.solana-testnet.quiknode.pro/',
+    chainId: ChainId.Devnet,
+  }
 ];
 
 const DEFAULT_ENDPOINT = ENDPOINTS[0];
@@ -108,14 +117,14 @@ export function ConnectionProvider({ children }: { children: any }) {
 
   let maybeEndpoint;
   if (networkParam) {
-    let endpointParam = ENDPOINTS.find(({ name }) => name === networkParam);
+    const endpointParam = ENDPOINTS.find(({ name }) => name === networkParam);
     if (endpointParam) {
       maybeEndpoint = endpointParam;
     }
   }
 
   if (networkStorage && !maybeEndpoint) {
-    let endpointStorage = ENDPOINTS.find(({ name }) => name === networkStorage);
+    const endpointStorage = ENDPOINTS.find(({ name }) => name === networkStorage);
     if (endpointStorage) {
       maybeEndpoint = endpointStorage;
     }
@@ -247,7 +256,7 @@ export async function sendTransactionsWithManualRetry(
   let stopPoint = 0;
   let tries = 0;
   let lastInstructionsLength = null;
-  let toRemoveSigners: Record<number, boolean> = {};
+  const toRemoveSigners: Record<number, boolean> = {};
   instructions = instructions.filter((instr, i) => {
     if (instr.length > 0) {
       return true;
@@ -307,8 +316,8 @@ export const sendTransactions = async (
   signersSet: Keypair[][],
   sequenceType: SequenceType = SequenceType.Parallel,
   commitment: Commitment = 'singleGossip',
-  successCallback: (txid: string, ind: number) => void = (txid, ind) => {},
-  failCallback: (reason: string, ind: number) => boolean = (txid, ind) => false,
+  successCallback: (txid: string, ind: number) => void = (_txid, _ind) => {},
+  failCallback: (reason: string, ind: number) => boolean = (_txid, _ind) => false,
   block?: BlockhashAndFeeCalculator,
 ): Promise<number> => {
   if (!wallet.publicKey) throw new WalletNotConnectedError();
@@ -327,7 +336,7 @@ export const sendTransactions = async (
       continue;
     }
 
-    let transaction = new Transaction();
+    const transaction = new Transaction();
     instructions.forEach(instruction => transaction.add(instruction));
     transaction.recentBlockhash = block.blockhash;
     transaction.setSigners(
@@ -347,7 +356,7 @@ export const sendTransactions = async (
 
   const pendingTxns: Promise<{ txid: string; slot: number }>[] = [];
 
-  let breakEarlyObject = { breakEarly: false, i: 0 };
+  const breakEarlyObject = { breakEarly: false, i: 0 };
   console.log(
     'Signed txns length',
     signedTxns.length,
@@ -364,7 +373,7 @@ export const sendTransactions = async (
       .then(({ txid, slot }) => {
         successCallback(txid, i);
       })
-      .catch(reason => {
+      .catch(_reason => {
         // @ts-ignore
         failCallback(signedTxns[i], i);
         if (sequenceType === SequenceType.StopOnFailure) {
@@ -431,7 +440,7 @@ export const sendTransaction = async (
   }
 
   const rawTransaction = transaction.serialize();
-  let options = {
+  const options = {
     skipPreflight: true,
     commitment,
   };

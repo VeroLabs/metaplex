@@ -25,7 +25,7 @@ interface BlockhashAndFeeCalculator {
   feeCalculator: FeeCalculator;
 }
 
-export type ENV = "mainnet-beta" | "testnet" | "devnet" | "localnet";
+export type ENV = "mainnet-beta" | "testnet" | "devnet" | "localnet" | "quicknode-dev" | "quicknode-test";
 
 export const ENDPOINTS = [
   {
