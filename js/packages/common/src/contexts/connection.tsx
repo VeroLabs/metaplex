@@ -70,7 +70,7 @@ export const ENDPOINTS: Array<Endpoint> = [
   {
     name: 'quicknode-dev',
     label: 'devnet (quicknode)',
-    url: 'https://hidden-winter-violet.solana-devnet.quiknode.pro/',
+    url: 'https://holy-solitary-butterfly.solana-devnet.quiknode.pro/',
     chainId: ChainId.Devnet,
   },
   {
