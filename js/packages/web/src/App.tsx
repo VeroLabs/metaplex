@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes } from './routes';
-// import { Routes } from './views/preLaunch/routes'
+import { WelcomeView } from './views';
 
 function App() {
-  return <Routes />;
+  const [skipWallet, setSkipWallet] = useState(true);
+  useEffect(() => {
+  }, [skipWallet]);
+
+  return skipWallet ? <WelcomeView clickCallback={setSkipWallet} /> : <Routes />;
 }
 
 export default App;
